@@ -762,9 +762,9 @@ def main():
     # Header with gradient background
     st.markdown(f"""
     <div class="header-gradient">
-        <h1>{province}</h1>
-        <p style="font-size: 1.1rem; margin: 0.5rem 0 0 0; color: #6b6b6b;">
-            <strong>Dengue Early Warning & Forecasting System</strong>
+        <h1 style="font-weight: 600;">{province}</h1>
+        <p style="font-size: 1.1rem; margin: 0.5rem 0 0 0; color: #6b6b6b; font-weight: 500;">
+            Dengue Early Warning & Forecasting System
         </p>
         <p style="margin: 0.25rem 0 0 0; color: #9b9b9b; font-size: 0.9rem;">
             Retrospective assessment and cross-validated prediction
