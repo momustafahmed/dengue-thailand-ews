@@ -23,7 +23,7 @@ This prototype showcases how a system could provide **retrospective assessment a
 - **Climate-dengue correlation** analysis using mock climate inputs
 
 ### 🎨 Modern Design
-- **Minimal, Notion-inspired UI** with clean typography
+- **Minimal, research-grade UI** with clean typography
 - **Responsive visualizations** using Plotly
 - **Interactive controls** for dynamic analysis
 - **Professional charts** and metrics
