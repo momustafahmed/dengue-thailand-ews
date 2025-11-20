@@ -1,13 +1,15 @@
 # Dengue Early Warning System - Thailand
 
-A modern, interactive dashboard for province-level dengue surveillance and forecasting in Thailand. Built with Streamlit and featuring cross-validated prediction models.
+> ⚠️ **Prototype Notice**: This dashboard is a design + analytics prototype powered entirely by _simulated data_. It demonstrates the user experience, analytical flows, and visual language for a future operational system, but it is **not connected to live surveillance feeds** yet.
+
+A modern, interactive dashboard concept for province-level dengue surveillance and forecasting in Thailand. Built with Streamlit and featuring cross-validated prediction models on synthetic datasets so stakeholders can test-drive the experience safely.
 
 ![Dashboard Preview](https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
 ![Python](https://img.shields.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)
 
 ## 🎯 Overview
 
-This system provides **retrospective assessment and cross-validated prediction** of dengue transmission in Thailand using:
+This prototype showcases how a system could provide **retrospective assessment and cross-validated prediction** of dengue transmission in Thailand using simulated signals meant to resemble:
 - **Climate data** (temperature, humidity, rainfall)
 - **Routine surveillance** data from Thailand Ministry of Public Health
 - **Machine learning** (XGBoost) for forecasting
@@ -15,10 +17,10 @@ This system provides **retrospective assessment and cross-validated prediction**
 ## ✨ Features
 
 ### 📊 Interactive Dashboard
-- **Province-level forecasting** for 5 major provinces
+- **Province-level forecasting** for 5 major provinces (synthetic baseline)
 - **4-week ahead predictions** with uncertainty intervals
-- **Real-time risk assessment** and alerts
-- **Climate-dengue correlation** analysis
+- **Prototype risk assessment** messages for scenario planning
+- **Climate-dengue correlation** analysis using mock climate inputs
 
 ### 🎨 Modern Design
 - **Minimal, Notion-inspired UI** with clean typography
@@ -29,8 +31,8 @@ This system provides **retrospective assessment and cross-validated prediction**
 ### 📈 Analysis Capabilities
 - **Forecast & Trends**: Weekly predictions with confidence intervals
 - **Climate Drivers**: Meteorological analysis and cross-correlations
-- **Model Performance**: Validation metrics (MAE, RMSE, R², CRPS)
-- **Comparative Analysis**: Multi-province comparisons and heatmaps
+- **Model Performance**: Validation metrics (MAE, RMSE, R², CRPS) on hold-out synthetic folds
+- **Comparative Analysis**: Multi-province comparisons and heatmaps derived from simulated outbreaks
 
 ## 🚀 Quick Start
 
@@ -85,8 +87,10 @@ dengue-thailand-ews/
 
 ## 📊 Data Sources
 
-- **Surveillance**: Thailand Ministry of Public Health - Department of Disease Control (MoPH DDC)
-- **Climate**: Thai Meteorological Department (TMD) / Google Earth Engine (GEE)
+All values in this prototype are **generated programmatically** to reflect realistic seasonality, outbreak spikes, and climate covariates. Agencies listed below are the intended upstream providers once the system is wired to real feeds:
+
+- **Surveillance**: Thailand Ministry of Public Health - Department of Disease Control (MoPH DDC) *(placeholder)*
+- **Climate**: Thai Meteorological Department (TMD) / Google Earth Engine (GEE) *(placeholder)*
 - **ICD-10 Codes**: A90 (Dengue fever), A91 (Dengue hemorrhagic fever)
 
 ## 🎯 Key Metrics
@@ -140,7 +144,7 @@ dengue-thailand-ews/
 
 ## 📝 Note
 
-This is a **demonstration dashboard** using synthetic data for visualization purposes. For operational deployment, integrate with real-time surveillance and climate data sources.
+This is a **prototype / demonstration dashboard** that only uses synthetic data for visualization purposes. For operational deployment, integrate with real-time surveillance and climate data sources and validate against official case counts.
 
 ## 🤝 Contributing
 
@@ -162,4 +166,4 @@ For questions or collaboration opportunities, please open an issue on GitHub.
 
 ---
 
-**Built with ❤️ using Streamlit** | **Version 2.3.0**
+**Built with ❤️ using Streamlit** | **Prototype v2.3.0 (synthetic data only)**
