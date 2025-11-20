@@ -1630,7 +1630,7 @@ def main():
     **Dengue Early Warning System for Thailand** | Province-level retrospective assessment and cross-validated prediction  
     Data sources: Thailand Ministry of Public Health (DDC), Thai Meteorological Department, Google Earth Engine  
     Methods: XGBoost with lagged climate & surveillance features | Cross-validation: blocked forward-chaining  
-    **Note:** This is a demonstration dashboard with synthetic data for visualization purposes only.
+    **Note:** This is a demonstration dashboard with simulated data for visualization purposes only.
     """)
 
     # ========================================================================
