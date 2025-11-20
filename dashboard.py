@@ -878,8 +878,8 @@ def main():
         "Forecast & Trends",
         "Climate Drivers", 
         "Syndromic Context",
-        "Comparative Analysis",
-        "Model Performance"
+        "Model Performance",
+        "Comparative Analysis"
     ])
     
     # ========================================================================
@@ -1353,7 +1353,7 @@ def main():
         st.plotly_chart(fig_control, use_container_width=True)
     
     # ========================================================================
-    # TAB 4: COMPARATIVE ANALYSIS
+    # TAB 4: MODEL PERFORMANCE
     # ========================================================================
     
     with tab4:
@@ -1465,7 +1465,7 @@ def main():
         
         st.plotly_chart(fig_heatmap, use_container_width=True)
     
-    # TAB 5: MODEL PERFORMANCE
+    # TAB 5: COMPARATIVE ANALYSIS
     # ========================================================================
     
     with tab5:
