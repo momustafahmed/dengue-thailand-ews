@@ -5,7 +5,7 @@ services:
     image: momustafahmed/dengue-dashboard:latest
     container_name: dengue-dashboard
     ports:
-      - "8501:8501"
+      - "80:8501"
     environment:
       STREAMLIT_ENV: production
     restart: unless-stopped
