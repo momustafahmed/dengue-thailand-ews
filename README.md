@@ -42,7 +42,7 @@ This system provides **retrospective assessment and cross-validated prediction**
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/dengue-thailand-ews.git
+git clone https://github.com/momustafahmed/dengue-thailand-ews.git
 cd dengue-thailand-ews
 ```
 
@@ -122,16 +122,21 @@ dengue-thailand-ews/
 ## 🌟 Features in Detail
 
 ### Province Coverage
-- 🏙️ Bangkok
-- 🏔️ Chiang Mai
-- 🏖️ Phuket
-- 🌾 Khon Kaen
-- 🌊 Songkhla
+- Bangkok
+- Chiang Mai
+- Phuket
+- Khon Kaen
+- Songkhla
 
 ### Risk Assessment
-- ⚠️ **High Risk**: Cases >1.5x seasonal average
-- 📈 **Rising**: Increasing trend detected
-- ✓ **Stable**: Within expected range
+- High Risk: Cases >1.5x seasonal average
+- Rising: Increasing trend detected
+- Stable: Within expected range
+
+### Syndromic Context (Control Diseases)
+- HFMD and Chikungunya synthetic signals for situational awareness
+- Weekly metrics alongside dengue forecasts
+- Comparative overlay chart for recent 52 weeks
 
 ## 📝 Note
 
