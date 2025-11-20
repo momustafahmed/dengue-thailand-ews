@@ -160,9 +160,11 @@ For questions or collaboration opportunities, please open an issue on GitHub.
 
 ## 🙏 Acknowledgments
 
-- Thailand Ministry of Public Health
-- Thai Meteorological Department
-- World Health Organization (WHO) dengue guidelines
+This prototype leans on the outstanding public-domain work of the regional health and climate community. The following organizations provided reference methodologies, open documentation, or design inspiration, even though this build uses synthetic data only:
+
+- **Thailand Ministry of Public Health (DDC)** – national surveillance guidelines and outbreak reports
+- **Thai Meteorological Department / GISTDA** – climate-monitoring references that shaped the driver cards
+- **World Health Organization (WHO)** – dengue control frameworks and early-warning best practices
 
 ---
 
