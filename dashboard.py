@@ -665,8 +665,8 @@ def main():
     # ========================================================================
     
     with st.sidebar:
-        # Header title
-        st.markdown("<h1 style='font-size: 1.75rem; font-weight: 700; margin: 0.25rem 0 0.5rem 0;'>Dengue EWS</h1>", unsafe_allow_html=True)
+        # Header title with Thailand flag
+        st.markdown("<h1 style='font-size: 1.75rem; font-weight: 700; margin: 0.25rem 0 0.5rem 0;'>🇹🇭 Dengue EWS</h1>", unsafe_allow_html=True)
         st.markdown("<p style='color: #6b6b6b; font-size: 0.95rem; margin: 0;'>Thailand Province-Level Forecasting</p>", unsafe_allow_html=True)
         st.markdown("---")
         
