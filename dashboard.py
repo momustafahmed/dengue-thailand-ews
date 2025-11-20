@@ -877,9 +877,9 @@ def main():
     tab1, tab2, tab3, tab4, tab5 = st.tabs([
         "Forecast & Trends",
         "Climate Drivers", 
+        "Comparative Analysis",
         "Syndromic Context",
-        "Model Performance",
-        "Comparative Analysis"
+        "Model Performance"
     ])
     
     # ========================================================================
@@ -1266,10 +1266,123 @@ def main():
         st.plotly_chart(fig_corr, use_container_width=True)
     
     # ========================================================================
-    # TAB 3: CONTROL DISEASES / SYNDROMIC CONTEXT
+    # TAB 3: COMPARATIVE ANALYSIS
     # ========================================================================
     
     with tab3:
+        st.markdown("### Multi-Province Comparison")
+        st.caption("Comparative epidemiological trends across Thailand provinces")
+        
+        # Get recent data for all provinces
+        recent_year = year_range[1]
+        all_provinces_data = df[df['year'] == recent_year].copy()
+        
+        # Time series comparison
+        st.markdown(f"#### Weekly Cases Comparison ({recent_year})")
+        
+        fig_multi = go.Figure()
+        
+        colors = {
+            'Bangkok': '#1a1a1a',
+            'Chiang Mai': '#ef4444',
+            'Phuket': '#3b82f6',
+            'Khon Kaen': '#22c55e',
+            'Songkhla': '#f59e0b'
+        }
+        
+        for prov in sorted(df['province'].unique()):
+            prov_data = all_provinces_data[all_provinces_data['province'] == prov]
+            fig_multi.add_trace(go.Scatter(
+                x=prov_data['epi_week'],
+                y=prov_data['cases'],
+                mode='lines',
+                name=prov,
+                line=dict(color=colors.get(prov, '#6b6b6b'), width=2.5),
+                hovertemplate='<b>' + prov + '</b><br>%{x|%Y-%m-%d}<br>Cases: %{y}<extra></extra>'
+            ))
+        
+        fig_multi.update_layout(
+            plot_bgcolor='#ffffff',
+            paper_bgcolor='#ffffff',
+            font=dict(family='Inter, system-ui, sans-serif', color='#0a0a0a'),
+            xaxis=dict(title='Week', gridcolor='#f0f0f0', showline=True, linecolor='#e0e0e0'),
+            yaxis=dict(title='Dengue Cases', gridcolor='#f0f0f0', showline=True, linecolor='#e0e0e0'),
+            hovermode='x unified',
+            legend=dict(orientation='h', yanchor='top', y=-0.15, xanchor='left', x=0),
+            height=450,
+            margin=dict(l=60, r=30, t=30, b=100)
+        )
+        
+        st.plotly_chart(fig_multi, use_container_width=True)
+        
+        # Summary statistics
+        st.markdown(f"#### Province Summary Statistics ({recent_year})")
+        
+        summary_data = []
+        for prov in sorted(df['province'].unique()):
+            prov_year_data = df[(df['province'] == prov) & (df['year'] == recent_year)]
+            summary_data.append({
+                'Province': prov,
+                'Total Cases': f"{prov_year_data['cases'].sum():,}",
+                'Weekly Average': f"{prov_year_data['cases'].mean():.1f}",
+                'Peak Week': f"{prov_year_data['cases'].max():,}",
+                'Std Dev': f"{prov_year_data['cases'].std():.1f}",
+                'Min': f"{prov_year_data['cases'].min():,}"
+            })
+        
+        summary_df = pd.DataFrame(summary_data)
+        st.dataframe(summary_df, use_container_width=True, hide_index=True)
+        
+        # Heatmap of cases by province and month
+        st.markdown(f"#### Temporal Pattern Heatmap ({recent_year})")
+        
+        # Create month-province matrix
+        heatmap_data = all_provinces_data.copy()
+        heatmap_data['month'] = heatmap_data['epi_week'].dt.month
+        pivot_data = heatmap_data.pivot_table(
+            values='cases',
+            index='province',
+            columns='month',
+            aggfunc='sum'
+        ).fillna(0)
+        
+        month_names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        
+        fig_heatmap = go.Figure(data=go.Heatmap(
+            z=pivot_data.values,
+            x=[month_names[i-1] for i in pivot_data.columns],
+            y=list(pivot_data.index),
+            colorscale=[
+                [0.0, "#e3f2ff"],
+                [0.2, "#9ad1ff"],
+                [0.4, "#5ab4ff"],
+                [0.6, "#ffdd6f"],
+                [0.8, "#ff9b42"],
+                [1.0, "#d9383a"]
+            ],
+            zmin=0,
+            hovertemplate='<b>%{y}</b><br>%{x}<br>Cases: %{z:.0f}<extra></extra>',
+            colorbar=dict(title="Cases")
+        ))
+        
+        fig_heatmap.update_layout(
+            plot_bgcolor='#ffffff',
+            paper_bgcolor='#ffffff',
+            font=dict(family='Inter, system-ui, sans-serif', color='#0a0a0a'),
+            xaxis=dict(title='Month', side='bottom'),
+            yaxis=dict(title='Province'),
+            height=350,
+            margin=dict(l=150, r=100, t=30, b=50)
+        )
+        
+        st.plotly_chart(fig_heatmap, use_container_width=True)
+    
+    # ========================================================================
+    # TAB 4: CONTROL DISEASES / SYNDROMIC CONTEXT
+    # ========================================================================
+    
+    with tab4:
         st.markdown("### Syndromic Context (Control Diseases)")
         st.caption("Synthetic HFMD and Chikungunya signals for situational awareness")
         
@@ -1352,11 +1465,10 @@ def main():
         
         st.plotly_chart(fig_control, use_container_width=True)
     
-    # ========================================================================
-    # TAB 4: MODEL PERFORMANCE
+    # TAB 5: MODEL PERFORMANCE
     # ========================================================================
     
-    with tab4:
+    with tab5:
         st.markdown("### Model Validation & Performance Metrics")
         st.caption("Out-of-sample validation results and feature importance analysis")
         
@@ -1506,118 +1618,6 @@ def main():
                 CRPS minimization
             </div>
             """, unsafe_allow_html=True)
-    
-    # TAB 5: COMPARATIVE ANALYSIS
-    # ========================================================================
-    
-    with tab5:
-        st.markdown("### Multi-Province Comparison")
-        st.caption("Comparative epidemiological trends across Thailand provinces")
-        
-        # Get recent data for all provinces
-        recent_year = year_range[1]
-        all_provinces_data = df[df['year'] == recent_year].copy()
-        
-        # Time series comparison
-        st.markdown(f"#### Weekly Cases Comparison ({recent_year})")
-        
-        fig_multi = go.Figure()
-        
-        colors = {
-            'Bangkok': '#1a1a1a',
-            'Chiang Mai': '#ef4444',
-            'Phuket': '#3b82f6',
-            'Khon Kaen': '#22c55e',
-            'Songkhla': '#f59e0b'
-        }
-        
-        for prov in sorted(df['province'].unique()):
-            prov_data = all_provinces_data[all_provinces_data['province'] == prov]
-            fig_multi.add_trace(go.Scatter(
-                x=prov_data['epi_week'],
-                y=prov_data['cases'],
-                mode='lines',
-                name=prov,
-                line=dict(color=colors.get(prov, '#6b6b6b'), width=2.5),
-                hovertemplate='<b>' + prov + '</b><br>%{x|%Y-%m-%d}<br>Cases: %{y}<extra></extra>'
-            ))
-        
-        fig_multi.update_layout(
-            plot_bgcolor='#ffffff',
-            paper_bgcolor='#ffffff',
-            font=dict(family='Inter, system-ui, sans-serif', color='#0a0a0a'),
-            xaxis=dict(title='Week', gridcolor='#f0f0f0', showline=True, linecolor='#e0e0e0'),
-            yaxis=dict(title='Dengue Cases', gridcolor='#f0f0f0', showline=True, linecolor='#e0e0e0'),
-            hovermode='x unified',
-            legend=dict(orientation='h', yanchor='top', y=-0.15, xanchor='left', x=0),
-            height=450,
-            margin=dict(l=60, r=30, t=30, b=100)
-        )
-        
-        st.plotly_chart(fig_multi, use_container_width=True)
-        
-        # Summary statistics
-        st.markdown(f"#### Province Summary Statistics ({recent_year})")
-        
-        summary_data = []
-        for prov in sorted(df['province'].unique()):
-            prov_year_data = df[(df['province'] == prov) & (df['year'] == recent_year)]
-            summary_data.append({
-                'Province': prov,
-                'Total Cases': f"{prov_year_data['cases'].sum():,}",
-                'Weekly Average': f"{prov_year_data['cases'].mean():.1f}",
-                'Peak Week': f"{prov_year_data['cases'].max():,}",
-                'Std Dev': f"{prov_year_data['cases'].std():.1f}",
-                'Min': f"{prov_year_data['cases'].min():,}"
-            })
-        
-        summary_df = pd.DataFrame(summary_data)
-        st.dataframe(summary_df, use_container_width=True, hide_index=True)
-        
-        # Heatmap of cases by province and month
-        st.markdown(f"#### Temporal Pattern Heatmap ({recent_year})")
-        
-        # Create month-province matrix
-        heatmap_data = all_provinces_data.copy()
-        heatmap_data['month'] = heatmap_data['epi_week'].dt.month
-        pivot_data = heatmap_data.pivot_table(
-            values='cases',
-            index='province',
-            columns='month',
-            aggfunc='sum'
-        ).fillna(0)
-        
-        month_names = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
-                      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        
-        fig_heatmap = go.Figure(data=go.Heatmap(
-            z=pivot_data.values,
-            x=[month_names[i-1] for i in pivot_data.columns],
-            y=list(pivot_data.index),
-            colorscale=[
-                [0.0, "#e3f2ff"],
-                [0.2, "#9ad1ff"],
-                [0.4, "#5ab4ff"],
-                [0.6, "#ffdd6f"],
-                [0.8, "#ff9b42"],
-                [1.0, "#d9383a"]
-            ],
-            zmin=0,
-            hovertemplate='<b>%{y}</b><br>%{x}<br>Cases: %{z:.0f}<extra></extra>',
-            colorbar=dict(title="Cases")
-        ))
-        
-        fig_heatmap.update_layout(
-            plot_bgcolor='#ffffff',
-            paper_bgcolor='#ffffff',
-            font=dict(family='Inter, system-ui, sans-serif', color='#0a0a0a'),
-            xaxis=dict(title='Month', side='bottom'),
-            yaxis=dict(title='Province'),
-            height=350,
-            margin=dict(l=150, r=100, t=30, b=50)
-        )
-        
-        st.plotly_chart(fig_heatmap, use_container_width=True)
     
     # ========================================================================
     # FOOTER
