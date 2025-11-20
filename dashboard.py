@@ -12,7 +12,7 @@ from plotly.subplots import make_subplots
 
 st.set_page_config(
     page_title="Dengue Early Warning System – Thailand",
-    page_icon="🦟",
+    page_icon=None,
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -37,9 +37,10 @@ st.markdown("""
     }
     
     [data-testid="stSidebar"] > div:first-child {
-        padding-top: 0.75rem;
+        padding-top: 0.25rem;
         padding-left: 1.5rem;
         padding-right: 1.5rem;
+        padding-bottom: 1rem;
     }
     
     [data-testid="stSidebar"] h3 {
@@ -48,8 +49,8 @@ st.markdown("""
         color: #6b6b6b;
         text-transform: uppercase;
         letter-spacing: 0.1em;
-        margin-bottom: 0.5rem;
-        margin-top: 2rem;
+        margin-bottom: 0.35rem;
+        margin-top: 1.1rem;
     }
     
     [data-testid="stSidebar"] .stMarkdown p {
@@ -61,7 +62,7 @@ st.markdown("""
     [data-testid="stSidebar"] hr {
         border: none;
         border-top: 1px solid #e8e8e8;
-        margin: 1.5rem 0;
+        margin: 1rem 0;
         opacity: 1;
     }
     
@@ -644,11 +645,11 @@ def calculate_performance_metrics(province):
 def create_risk_alert(current_cases, forecast_mean, historical_avg):
     """Generate risk alert based on case counts"""
     if current_cases > historical_avg * 1.5 or forecast_mean > historical_avg * 1.5:
-        return "warning", "⚠️ Elevated Risk", "Cases above seasonal average"
+        return "warning", "Elevated Risk", "Cases above seasonal average"
     elif forecast_mean > current_cases * 1.2:
-        return "info", "📈 Increasing Trend", "Forecasted rise in cases"
+        return "info", "Increasing Trend", "Forecasted rise in cases"
     else:
-        return "success", "✓ Stable", "Cases within expected range"
+        return "success", "Stable", "Cases within expected range"
 
 # ============================================================================
 # MAIN DASHBOARD
@@ -664,23 +665,19 @@ def main():
     # ========================================================================
     
     with st.sidebar:
-        # Header with mosquito emoji and clean title
-        st.markdown('<p style="font-size: 2rem; margin: 0;">🦟</p>', unsafe_allow_html=True)
+        # Header title
         st.markdown("<h1 style='font-size: 1.75rem; font-weight: 700; margin: 0.25rem 0 0.5rem 0;'>Dengue EWS</h1>", unsafe_allow_html=True)
         st.markdown("<p style='color: #6b6b6b; font-size: 0.95rem; margin: 0;'>Thailand Province-Level Forecasting</p>", unsafe_allow_html=True)
         st.markdown("---")
         
         # Province selector
-        province_icons = {
-            'Bangkok': '🏙️', 'Chiang Mai': '🏔️', 'Phuket': '🏖️',
-            'Khon Kaen': '🌾', 'Songkhla': '🌊'
-        }
+        province_icons = {}
         
         st.markdown("### Location")
         province = st.selectbox(
             "Province",
             options=sorted(df['province'].unique()),
-            format_func=lambda x: f"{province_icons.get(x, '📍')} {x}",
+            format_func=lambda x: x,
             label_visibility="collapsed"
         )
         
@@ -747,11 +744,11 @@ def main():
         
         action_col1, action_col2 = st.columns([1, 1])
         with action_col1:
-            if st.button("🔄", key="refresh_btn", use_container_width=True, help="Refresh Data"):
+            if st.button("Refresh", key="refresh_btn", use_container_width=True, help="Refresh Data"):
                 st.cache_data.clear()
                 st.rerun()
         with action_col2:
-            st.button("📥", key="export_btn", use_container_width=True, help="Export CSV")
+            st.button("Export", key="export_btn", use_container_width=True, help="Export CSV")
         
         # Footer with improved styling
         st.markdown("---")
@@ -765,7 +762,7 @@ def main():
     # Header with gradient background
     st.markdown(f"""
     <div class="header-gradient">
-        <h1>{province_icons.get(province, '📍')} {province}</h1>
+        <h1>{province}</h1>
         <p style="font-size: 1.1rem; margin: 0.5rem 0 0 0; color: #6b6b6b;">
             <strong>Dengue Early Warning & Forecasting System</strong>
         </p>
@@ -814,7 +811,7 @@ def main():
     
     with col1:
         st.metric(
-            label="📊 Current Week",
+            label="Current Week",
             value=f"{current_cases:,}",
             delta=f"{delta_cases:+.0f} ({delta_pct:+.1f}%)",
             delta_color="inverse"
@@ -827,7 +824,7 @@ def main():
     
     with col2:
         st.metric(
-            label="📈 4-Week Avg",
+            label="4-Week Avg",
             value=f"{avg_4week:.0f}",
             delta=f"{delta_avg:+.1f}",
             delta_color="inverse"
@@ -840,7 +837,7 @@ def main():
     
     with col3:
         st.metric(
-            label="🔮 Next Week",
+            label="Next Week",
             value=f"{next_week_pred:.0f}",
             delta=f"{pred_change:+.0f} ({pred_change_pct:+.1f}%)",
             delta_color="inverse"
@@ -852,7 +849,7 @@ def main():
     
     with col4:
         st.metric(
-            label=f"⚡ {year_range[1]} Peak",
+            label=f"{year_range[1]} Peak",
             value=f"{peak_2024:,}",
             delta=f"Week {province_df.loc[peak_week, 'week_num']}" if peak_week in province_df.index else None,
             delta_color="off"
@@ -865,7 +862,7 @@ def main():
     
     with col5:
         st.metric(
-            label=f"📅 {year_range[1]} Total",
+            label=f"{year_range[1]} Total",
             value=f"{ytd_total:,}",
             delta=f"{ytd_change:+.1f}% vs {year_range[1]-1}",
             delta_color="inverse"
@@ -877,9 +874,10 @@ def main():
     # TABS FOR ORGANIZED CONTENT
     # ========================================================================
     
-    tab1, tab2, tab3, tab4 = st.tabs([
+    tab1, tab2, tab3, tab4, tab5 = st.tabs([
         "Forecast & Trends",
         "Climate Drivers", 
+        "Syndromic Context",
         "Comparative Analysis",
         "Model Performance"
     ])
@@ -981,7 +979,7 @@ def main():
         st.plotly_chart(fig, use_container_width=True)
         
         # Time series decomposition view
-        st.markdown("#### 📉 Trend Analysis")
+        st.markdown("#### Trend Analysis")
         col1, col2 = st.columns(2)
         
         with col1:
@@ -1201,7 +1199,7 @@ def main():
             """, unsafe_allow_html=True)
         
         # Cross-correlation analysis
-        st.markdown("#### 🔬 Climate-Dengue Correlation")
+        st.markdown("#### Climate-Dengue Correlation")
         
         # Calculate correlations at different lags
         lags = range(0, 9)
@@ -1268,10 +1266,97 @@ def main():
         st.plotly_chart(fig_corr, use_container_width=True)
     
     # ========================================================================
-    # TAB 3: COMPARATIVE ANALYSIS
+    # TAB 3: CONTROL DISEASES / SYNDROMIC CONTEXT
     # ========================================================================
     
     with tab3:
+        st.markdown("### Syndromic Context (Control Diseases)")
+        st.caption("Synthetic HFMD and Chikungunya signals for situational awareness")
+        
+        ctrl_col1, ctrl_col2 = st.columns(2)
+        
+        current_hfmd = province_df.iloc[-1]['hfmd']
+        prev_hfmd = province_df.iloc[-2]['hfmd']
+        delta_hfmd = current_hfmd - prev_hfmd
+        delta_hfmd_pct = (delta_hfmd / prev_hfmd * 100) if prev_hfmd > 0 else 0
+        
+        with ctrl_col1:
+            st.metric(
+                label="HFMD (this week)",
+                value=f"{current_hfmd:,}",
+                delta=f"{delta_hfmd:+.0f} ({delta_hfmd_pct:+.1f}%)",
+                delta_color="inverse"
+            )
+        
+        current_chik = province_df.iloc[-1]['chikungunya']
+        prev_chik = province_df.iloc[-2]['chikungunya']
+        delta_chik = current_chik - prev_chik
+        delta_chik_pct = (delta_chik / prev_chik * 100) if prev_chik > 0 else 0
+        
+        with ctrl_col2:
+            st.metric(
+                label="Chikungunya (this week)",
+                value=f"{current_chik:,}",
+                delta=f"{delta_chik:+.0f} ({delta_chik_pct:+.1f}%)",
+                delta_color="inverse"
+            )
+        
+        control_recent = province_df.tail(52)
+        fig_control = go.Figure()
+        
+        fig_control.add_trace(go.Scatter(
+            x=control_recent['epi_week'],
+            y=control_recent['chikungunya'],
+            mode='lines+markers',
+            name='Chikungunya',
+            line=dict(color='#06b6d4', width=2.5),
+            marker=dict(size=6, color='#06b6d4'),
+            fill='tozeroy',
+            fillcolor='rgba(6, 182, 212, 0.08)',
+            hovertemplate='<b>Chikungunya</b><br>%{x|%Y-%m-%d}<br>Cases: %{y:.0f}<extra></extra>'
+        ))
+        
+        fig_control.add_trace(go.Scatter(
+            x=control_recent['epi_week'],
+            y=control_recent['hfmd'],
+            mode='lines+markers',
+            name='HFMD',
+            line=dict(color='#8b5cf6', width=2.5),
+            marker=dict(size=6, color='#8b5cf6'),
+            fill='tozeroy',
+            fillcolor='rgba(139, 92, 246, 0.08)',
+            hovertemplate='<b>HFMD</b><br>%{x|%Y-%m-%d}<br>Cases: %{y:.0f}<extra></extra>'
+        ))
+        
+        fig_control.add_trace(go.Scatter(
+            x=control_recent['epi_week'],
+            y=control_recent['cases'],
+            mode='lines',
+            name='Dengue (context)',
+            line=dict(color='#9ca3af', width=1.6, dash='dot'),
+            hovertemplate='<b>Dengue</b><br>%{x|%Y-%m-%d}<br>Cases: %{y:.0f}<extra></extra>'
+        ))
+        
+        fig_control.update_layout(
+            title='Control Diseases (last 52 weeks)',
+            title_font=dict(size=14),
+            plot_bgcolor='#ffffff',
+            paper_bgcolor='#ffffff',
+            font=dict(family='Inter, system-ui, sans-serif', color='#0a0a0a'),
+            xaxis=dict(gridcolor='#f5f5f5', title='Epidemiological Week'),
+            yaxis=dict(gridcolor='#f5f5f5', title='Cases'),
+            legend=dict(orientation='h', yanchor='top', y=-0.2, xanchor='left', x=0),
+            margin=dict(l=50, r=20, t=40, b=80),
+            height=340
+        )
+        
+        st.plotly_chart(fig_control, use_container_width=True)
+    
+    # ========================================================================
+    # TAB 4: COMPARATIVE ANALYSIS
+    # ========================================================================
+    
+    with tab4:
         st.markdown("### Model Validation & Performance Metrics")
         st.caption("Out-of-sample validation results and feature importance analysis")
         
@@ -1280,7 +1365,7 @@ def main():
         all_provinces_data = df[df['year'] == recent_year].copy()
         
         # Time series comparison
-        st.markdown(f"#### 📈 Weekly Cases Comparison ({recent_year})")
+        st.markdown(f"#### Weekly Cases Comparison ({recent_year})")
         
         fig_multi = go.Figure()
         
@@ -1298,7 +1383,7 @@ def main():
                 x=prov_data['epi_week'],
                 y=prov_data['cases'],
                 mode='lines',
-                name=f"{province_icons.get(prov, '📍')} {prov}",
+                name=prov,
                 line=dict(color=colors.get(prov, '#6b6b6b'), width=2.5),
                 hovertemplate='<b>' + prov + '</b><br>%{x|%Y-%m-%d}<br>Cases: %{y}<extra></extra>'
             ))
@@ -1318,13 +1403,13 @@ def main():
         st.plotly_chart(fig_multi, use_container_width=True)
         
         # Summary statistics
-        st.markdown(f"#### 📊 Province Summary Statistics ({recent_year})")
+        st.markdown(f"#### Province Summary Statistics ({recent_year})")
         
         summary_data = []
         for prov in sorted(df['province'].unique()):
             prov_year_data = df[(df['province'] == prov) & (df['year'] == recent_year)]
             summary_data.append({
-                'Province': f"{province_icons.get(prov, '📍')} {prov}",
+                'Province': prov,
                 'Total Cases': f"{prov_year_data['cases'].sum():,}",
                 'Weekly Average': f"{prov_year_data['cases'].mean():.1f}",
                 'Peak Week': f"{prov_year_data['cases'].max():,}",
@@ -1336,7 +1421,7 @@ def main():
         st.dataframe(summary_df, use_container_width=True, hide_index=True)
         
         # Heatmap of cases by province and month
-        st.markdown(f"#### 🗓️ Temporal Pattern Heatmap ({recent_year})")
+        st.markdown(f"#### Temporal Pattern Heatmap ({recent_year})")
         
         # Create month-province matrix
         heatmap_data = all_provinces_data.copy()
@@ -1354,7 +1439,7 @@ def main():
         fig_heatmap = go.Figure(data=go.Heatmap(
             z=pivot_data.values,
             x=[month_names[i-1] for i in pivot_data.columns],
-            y=[f"{province_icons.get(p, '📍')} {p}" for p in pivot_data.index],
+            y=list(pivot_data.index),
             colorscale=[
                 [0.0, "#e3f2ff"],
                 [0.2, "#9ad1ff"],
@@ -1380,10 +1465,10 @@ def main():
         
         st.plotly_chart(fig_heatmap, use_container_width=True)
     
-    # TAB 4: MODEL PERFORMANCE
+    # TAB 5: MODEL PERFORMANCE
     # ========================================================================
     
-    with tab4:
+    with tab5:
         st.markdown("### Multi-Province Comparison")
         st.caption("Comparative epidemiological trends across Thailand provinces")
         
@@ -1452,7 +1537,7 @@ def main():
         col1, col2 = st.columns([3, 2])
         
         with col1:
-            st.markdown("#### 🔍 Feature Importance")
+            st.markdown("#### Feature Importance")
             st.caption("Top drivers of recent dengue transmission")
             
             # Sample feature importance
@@ -1488,7 +1573,7 @@ def main():
             st.plotly_chart(fig_importance, use_container_width=True)
         
         with col2:
-            st.markdown("#### 📋 Forecast Details")
+            st.markdown("#### Forecast Details")
             
             forecast_table = forecast_df.copy()
             forecast_table['epi_week'] = forecast_table['epi_week'].dt.strftime('%Y-%m-%d')
@@ -1503,7 +1588,7 @@ def main():
             )
         
         # Model info
-        st.markdown("#### ⚙️ Model Configuration")
+        st.markdown("#### Model Configuration")
         
         col1, col2, col3 = st.columns(3)
         
