@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  dengue-dashboard:
+    build: .
+    ports:
+      - "8501:8501"
+    environment:
+      STREAMLIT_ENV: production
+    restart: unless-stopped

@@ -67,6 +67,20 @@ streamlit run dashboard.py
 
 The dashboard will open automatically in your browser at `http://localhost:8501`
 
+### Deploy with Docker
+
+1. Build the container
+```bash
+docker compose build
+```
+
+2. Run the service (exposes port `8501` by default)
+```bash
+docker compose up
+```
+
+Point your browser to `http://localhost:8501` (or the VPS IP) to access the Streamlit app. These Docker assets give managed platforms (e.g., Hostinger Docker Manager) the files they expect when pulling directly from this repository.
+
 ## 📁 Project Structure
 
 ```
