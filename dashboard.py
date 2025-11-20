@@ -12,7 +12,7 @@ from plotly.subplots import make_subplots
 
 st.set_page_config(
     page_title="Dengue Early Warning System – Thailand",
-    page_icon=None,
+    page_icon="🦟",
     layout="wide",
     initial_sidebar_state="expanded"
 )
