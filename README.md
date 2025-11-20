@@ -163,7 +163,7 @@ For questions or collaboration opportunities, please open an issue on GitHub.
 This prototype leans on the outstanding public-domain work of the regional health and climate community. The following organizations provided reference methodologies, open documentation, or design inspiration, and will serve as the authoritative **data providers once real feeds are plugged in**:
 
 - **Thailand Ministry of Public Health (DDC)** – national surveillance guidelines, outbreak reports, and the official case feeds slated for integration
-- **Thai Meteorological Department / GISTDA** – meteorological data streams (temperature, humidity, rainfall) that will eventually replace the synthetic climate drivers
+- **Thai Meteorological Department** – meteorological data streams (temperature, humidity, rainfall) that will eventually replace the synthetic climate drivers
 - **World Health Organization (WHO)** – dengue control frameworks and early-warning best practices that inform the analytics scaffolding
 
 ---
