@@ -2,9 +2,18 @@ version: "3.9"
 
 services:
   dengue-dashboard:
-    build: https://github.com/momustafahmed/dengue-thailand-ews.git
+    image: momustafahmed/dengue-dashboard:latest
+    container_name: dengue-dashboard
     ports:
       - "8501:8501"
     environment:
       STREAMLIT_ENV: production
+    restart: unless-stopped
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: dengue-dashboard --interval 60
     restart: unless-stopped
